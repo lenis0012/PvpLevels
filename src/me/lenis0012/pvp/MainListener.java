@@ -40,9 +40,6 @@ public class MainListener implements Listener
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event)
 	{
-		if(event.isCancelled())
-			return;
-		
 		Player player = event.getPlayer();
 		PvpPlayer pp = new PvpPlayer(player);
 		String format = event.getFormat();

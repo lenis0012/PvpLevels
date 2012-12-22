@@ -18,7 +18,7 @@ public class PvpPlayer
 		data = plugin.getDB();
 		name = player.getName();
 		id = player.getEntityId();
-		lvl = data.getValue(name, "level");
+		lvl = data.getValue(name, "lvl");
 		kills = data.getValue(name, "kills");
 	}
 	

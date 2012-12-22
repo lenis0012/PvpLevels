@@ -83,6 +83,7 @@ public class DataHandler
 		{
 			try
 			{
+				if(value == "lvl"){ value = "level"; }
 				ps = con.prepareStatement("SELECT * FROM "+table+" WHERE username=?");
 				ps.setString(1, user);
 				result = ps.executeQuery();
@@ -93,6 +94,10 @@ public class DataHandler
 				plugin.warn("Failed to load MySQL, trying to reconnect");
 				plugin.warn(e.getMessage());
 			}
+		}else
+		{
+			int par1Int = plugin.getCustomConfig().getInt(value+"."+user);
+			return par1Int;
 		}
 		return 0;
 	}

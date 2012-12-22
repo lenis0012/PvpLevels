@@ -9,10 +9,13 @@ import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -44,7 +47,7 @@ public class Main extends JavaPlugin
 		config.addDefault("settings.MySQL.user", "root");
 		config.addDefault("settings.MySQL.password", "password");
 		config.addDefault("settings.reward.item.use", true);
-		config.addDefault("settings.reward.item.id", 164);
+		config.addDefault("settings.reward.item.id", 264);
 		config.addDefault("settings.reward.item.amount", 1);
 		config.addDefault("settings.reward.money.use", false);
 		config.addDefault("settings.reward.money.amount", 120);
@@ -86,6 +89,28 @@ public class Main extends JavaPlugin
 			j = j + 1 + k;
 			levels.add(j);
 			i++;
+		}
+		
+		for(OfflinePlayer p : Bukkit.getServer().getOfflinePlayers())
+		{
+			String user = p.getName();
+			if(this.getConfig().getBoolean("settings.MySQL.use") == false)
+			{
+				int lvl = this.getCustomConfig().getInt("lvl."+user, 0);
+				int kills = this.getCustomConfig().getInt("kills."+user, 0);
+				if(kills >= 2 && lvl == 0)
+				{
+					this.getCustomConfig().set("kills."+user, 0);
+					this.saveCustomConfig();
+				}
+			}
+		}
+		for(Player p : Bukkit.getServer().getOnlinePlayers())
+		{
+			if(!data.isset(p.getName()))
+			{
+				data.setValue(p.getName(), 0, 0, 0);
+			}
 		}
 	}
 	

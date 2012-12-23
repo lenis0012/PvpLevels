@@ -117,10 +117,13 @@ public class DataHandler
 					ps.executeUpdate();
 				}else
 				{
-					ps = con.prepareStatement("UPDATE "+table+" SET level=? kills=? WHERE username=?");
+					ps = con.prepareStatement("UPDATE "+table+" SET level=? WHERE username=?");
 					ps.setInt(1, level);
-					ps.setInt(2, kills);
-					ps.setString(3, user);
+					ps.setString(2, user);
+					ps.executeUpdate();
+					ps = con.prepareStatement("UPDATE "+table+" SET kills=? WHERE username=?");
+					ps.setInt(1, kills);
+					ps.setString(2, user);
 					ps.executeUpdate();
 				}
 			} catch(SQLException e)

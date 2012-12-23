@@ -33,6 +33,9 @@ public class Main extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		File file = new File(this.getDataFolder(), "config.yml");
+		boolean fr = !file.exists();
+		
 		//create variables
 		PluginManager pm = this.getServer().getPluginManager();
 		FileConfiguration config =  this.getConfig();
@@ -53,7 +56,8 @@ public class Main extends JavaPlugin
 		config.addDefault("settings.reward.money.amount", 120);
 		config.addDefault("settings.reward.command.use", false);
 		config.addDefault("settings.reward.command.command", "say {Player} has reached a new level");
-		config.addDefault("settings.reward.lvl.50.command", "pex user {Player} group add PvpGod");
+		if(fr)
+			config.addDefault("settings.reward.lvl.50.command", "pex user {Player} group add PvpGod");
 		config.options().copyDefaults(true);
 		saveConfig();
 		

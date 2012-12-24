@@ -118,6 +118,7 @@ public class MainListener implements Listener
 		if(plugin.getConfig().getString("settings.reward.lvl."+lvl+".command") != null)
 		{
 			String cmd = plugin.getConfig().getString("settings.reward.lvl."+lvl+".command");
+			cmd = cmd.replace("{Player}", player.getName());
 			CommandSender sender = (CommandSender)Bukkit.getServer().getConsoleSender();
 			Bukkit.getServer().dispatchCommand(sender, cmd);
 		}
@@ -143,6 +144,7 @@ public class MainListener implements Listener
 		if(plugin.getConfig().getBoolean("settings.reward.command.use"))
 		{
 			String cmd = plugin.getConfig().getString("settings.reward.command.command");
+			cmd = cmd.replace("{Player}", player.getName());
 			
 			CommandSender sender = (CommandSender)Bukkit.getServer().getConsoleSender();
 			Bukkit.getServer().dispatchCommand(sender, cmd);

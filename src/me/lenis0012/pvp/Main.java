@@ -90,7 +90,7 @@ public class Main extends JavaPlugin
 				l = 0;
 				k = k + 1;
 			}
-			j = j + 1 + k;
+			j = j + 2 + k;
 			levels.add(j);
 			i++;
 		}

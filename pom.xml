@@ -15,11 +15,6 @@
   </properties>
 
   <repositories>
-    <!-- Repo for access to Vault -->
-    <repository>
-      <id>vault-repo</id>
-      <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
-    </repository>
     <!-- Repo for access to CraftBukkit -->
     <repository>
       <id>bukkit-repo</id>
@@ -36,7 +31,10 @@
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>
-      <version>1.2.23-SNAPSHOT</version>
+      <version>1.2.20</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Vault.jar</systemPath>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

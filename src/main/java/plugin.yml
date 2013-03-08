@@ -1,0 +1,5 @@
+name: PvpLevels
+version: 2.0
+main: com.lenis0012.bukkit.pvp.PvpLevels
+description: Fair pvp in minecraft
+author: lenis0012

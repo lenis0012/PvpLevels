@@ -1,0 +1,22 @@
+# General settings
+settings:
+  replace-string: [LEVEL]
+  max-level: 100
+  # Defines how much xtra kills you need for each level
+  # In this example we take 4 as default kills and 1.0 as increment
+  # lvl 1 = (4 * 1) + (1.0 * 0) = 4 kills.
+  # lvl 10 = (4 * 10) + (1.0 * 10) = 50 kills.
+  increment-value: 1.0
+  # Defines how much you allways need to level up (+ increment * lvl)
+  default-kills: 4
+  # Defines how much a player can attack the same player as before.
+  # Example: for value 3 --> after killing Notch 3 times it ignores killing notch
+  kill-session: 3
+# MySQL settings
+MySQL:
+  use: false
+  host: 'localhost'
+  port: 3306
+  database: 'bukkit'
+  username: 'root'
+  password: ''

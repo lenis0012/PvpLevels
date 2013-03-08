@@ -15,6 +15,11 @@
   </properties>
 
   <repositories>
+    <!-- Repo for access to Vault -->
+    <repository>
+      <id>vault-repo</id>
+      <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
+    </repository>
     <!-- Repo for access to CraftBukkit -->
     <repository>
       <id>bukkit-repo</id>
@@ -23,6 +28,13 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>net.milkbowl.vault</groupId>
+      <artifactId>Vault</artifactId>
+      <version>1.2.25-SNAPSHOT</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>

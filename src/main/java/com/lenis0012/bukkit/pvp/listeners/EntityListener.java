@@ -75,6 +75,7 @@ public class EntityListener implements Listener {
 				int kills = pp.get("kills");
 				int lvl = pp.get("level");
 				kills += 1;
+				pp.set("kills", kills);
 				
 				if(plugin.levelList.contains(kills)) {
 					lvl += 1;
@@ -82,8 +83,6 @@ public class EntityListener implements Listener {
 					attacker.sendMessage(ChatColor.GREEN + "Level up!");
 					pp.reward(attacker);
 				}
-				
-				pp.set("kills", kills);
 			}
 		}
 	}

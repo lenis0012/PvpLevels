@@ -65,11 +65,11 @@ public class EntityListener implements Listener {
 						if(current >= allowed)
 							return;
 						else
-							killer.put(name, dname+';'+(current + 1));
+							killer.put(name, dname+';'+String.valueOf((current + 1)));
 					} else
-						killer.put(name, dname+';'+1);
+						killer.put(name, dname+';'+'1');
 				} else {
-					killer.put(name, dname+';'+1);
+					killer.put(name, dname+';'+'1');
 				}
 				
 				int kills = pp.get("kills");

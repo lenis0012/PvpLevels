@@ -36,12 +36,9 @@ public class PvpLevels extends JavaPlugin {
 	
 	public List<Integer> levelList = new ArrayList<Integer>();
 	
-	public PvpLevels() {
-		instance = this;
-	}
-	
 	@Override
 	public void onEnable() {
+		instance = this;
 		File configFile = new File(this.getDataFolder(), "config.yml");
 		File rewardsFile = new File(this.getDataFolder(), "rewards.yml");
 		if(!configFile.exists()) {
@@ -117,7 +114,10 @@ public class PvpLevels extends JavaPlugin {
 	
 	public Object getReward(String level, String value) {
 		if(level != null) {
-			return this.rewards.get("rewards."+level+"."+value);
+			if(this.rewards.contains("rewards."+level))
+				return this.rewards.get("rewards."+level+"."+value);
+			else
+				return this.rewards.get("rewards."+value);
 		} else {
 			if(this.rewards.contains("rewards."+value))
 				return this.rewards.get("rewards."+value);

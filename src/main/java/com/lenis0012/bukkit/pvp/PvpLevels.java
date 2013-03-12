@@ -93,8 +93,10 @@ public class PvpLevels extends JavaPlugin {
 		}
 	}
 	
-	public void onDiable() {
+	@Override
+	public void onDisable() {
 		sql_thread.interrupt();
+		this.sqlControler.close();
 	}
 	
 	public DataManager getSqlControler() {

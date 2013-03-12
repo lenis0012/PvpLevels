@@ -2,7 +2,7 @@ rewards:
   #Item being given
   item:
     use: true
-    id: 164
+    id: 264
     amount: 1
   # Money being given (uses Vault)
   money:

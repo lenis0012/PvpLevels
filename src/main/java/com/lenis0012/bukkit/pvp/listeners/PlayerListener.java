@@ -19,7 +19,7 @@ public class PlayerListener implements Listener {
 		this.plugin = plugin;
 	}
 	
-	@EventHandler (priority = EventPriority.MONITOR)
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 		String name = player.getName();

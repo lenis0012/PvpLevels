@@ -20,7 +20,7 @@ public class MathUtil {
 	 * @param decimals Decimals
 	 * @return Rounded double
 	 */
-	public double round(double value, int decimals) {
+	public static double round(double value, int decimals) {
 		double p = Math.pow(10, decimals);
 		return Math.round(value * p) / p;
 	}

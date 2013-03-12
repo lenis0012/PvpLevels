@@ -52,6 +52,7 @@ public class EntityListener implements Listener {
 			if(attacker != null && attacker.isOnline()) {
 				String name = attacker.getName();
 				PvpPlayer pp = new PvpPlayer(name);
+				PvpPlayer dpp = new PvpPlayer(dname);
 				
 				if(killer.containsKey(name)) {
 					String value = killer.get(name);
@@ -76,6 +77,7 @@ public class EntityListener implements Listener {
 				int lvl = pp.get("level");
 				kills += 1;
 				pp.set("kills", kills);
+				dpp.set("deaths", dpp.get("deaths") + 1);
 				
 				if(plugin.levelList.contains(kills)) {
 					lvl += 1;

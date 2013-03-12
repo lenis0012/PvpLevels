@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.lenis0012.bukkit.pvp.commands.KdrCommand;
 import com.lenis0012.bukkit.pvp.data.DataManager;
 import com.lenis0012.bukkit.pvp.data.MySQL;
 import com.lenis0012.bukkit.pvp.data.SQLThread;
@@ -72,6 +73,7 @@ public class PvpLevels extends JavaPlugin {
 		pm.registerEvents(new PlayerListener(this), this);
 		pm.registerEvents(new EntityListener(this), this);
 		pm.registerEvents(new ServerListener(this), this);
+		getCommand("kdr").setExecutor(new KdrCommand());
 		
 		//Create hooks
 		Hook vault = new VaultHook("Vault");

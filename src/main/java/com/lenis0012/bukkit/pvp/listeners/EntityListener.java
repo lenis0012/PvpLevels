@@ -18,7 +18,7 @@ import com.lenis0012.bukkit.pvp.PvpPlayer;
 
 public class EntityListener implements Listener {
 	private PvpLevels plugin;
-	private int[] attacker = new int[Short.MAX_VALUE];
+	private Map<String, String> attackers = new HashMap<String, String>();
 	private Map<String, String> killer = new HashMap<String, String>();
 	
 	public EntityListener(PvpLevels plugin) {
@@ -36,7 +36,7 @@ public class EntityListener implements Listener {
 		if(a instanceof Player && b instanceof Player) {
 			Player defender = (Player) a;
 			Player attacker = (Player) b;
-			this.attacker[defender.getEntityId()] = attacker.getEntityId();
+			this.attackers.put(defender.getName(), attacker.getName());
 		}
 	}
 	
@@ -47,15 +47,15 @@ public class EntityListener implements Listener {
 		if(entity instanceof Player) {
 			Player defender = (Player) entity;
 			String dname = defender.getName();
-			Player attacker = this.getPlayerByEntityId(this.attacker[defender.getEntityId()]);
+			String aname = this.attackers.get(dname);
+			Player attacker = aname == null ? null : Bukkit.getPlayer(aname);
 			
 			if(attacker != null && attacker.isOnline()) {
-				String name = attacker.getName();
-				PvpPlayer pp = new PvpPlayer(name);
+				PvpPlayer pp = new PvpPlayer(aname);
 				PvpPlayer dpp = new PvpPlayer(dname);
 				
-				if(killer.containsKey(name)) {
-					String value = killer.get(name);
+				if(killer.containsKey(aname)) {
+					String value = killer.get(aname);
 					String[] data = value.split(";");
 					int allowed = plugin.getConfig().getInt("settings.kill-session");
 					
@@ -66,11 +66,11 @@ public class EntityListener implements Listener {
 						if(current >= allowed)
 							return;
 						else
-							killer.put(name, dname+';'+String.valueOf((current + 1)));
+							killer.put(aname, dname+';'+String.valueOf((current + 1)));
 					} else
-						killer.put(name, dname+';'+'1');
+						killer.put(aname, dname+';'+'1');
 				} else {
-					killer.put(name, dname+';'+'1');
+					killer.put(aname, dname+';'+'1');
 				}
 				
 				int kills = pp.get("kills");
@@ -87,14 +87,5 @@ public class EntityListener implements Listener {
 				}
 			}
 		}
-	}
-	
-	private Player getPlayerByEntityId(int entityId) {
-		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-			if(player.getEntityId() == entityId)
-				return player;
-		}
-		
-		return null;
 	}
 }

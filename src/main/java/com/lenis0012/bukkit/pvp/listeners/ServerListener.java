@@ -1,6 +1,7 @@
 package com.lenis0012.bukkit.pvp.listeners;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
@@ -16,7 +17,7 @@ public class ServerListener implements Listener {
 		this.plugin = plugin;
 	}
 	
-	@EventHandler
+	@EventHandler  (priority = EventPriority.MONITOR)
 	public void onPluginEnable(PluginEnableEvent event) {
 		Plugin enabled = event.getPlugin();
 		for(Hook hook : plugin.getHooks()) {
@@ -24,7 +25,7 @@ public class ServerListener implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler  (priority = EventPriority.MONITOR)
 	public void onPluginDisable(PluginDisableEvent event) {
 		Plugin disabled  = event.getPlugin();
 		for(Hook hook : plugin.getHooks()) {

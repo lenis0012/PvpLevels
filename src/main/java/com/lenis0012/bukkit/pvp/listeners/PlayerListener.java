@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
 		event.setFormat(format);
 	}
 	
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		String name = player.getName();
@@ -48,7 +48,7 @@ public class PlayerListener implements Listener {
 			pp.update();
 	}
 	
-	@EventHandler
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		String name = player.getName();

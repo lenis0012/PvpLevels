@@ -150,7 +150,7 @@ public class SQLite implements DataManager {
 		}
 		
 		try {
-			this.con = DriverManager.getConnection("jdbc:sqlite:"+fileDir+fileName);
+			this.con = DriverManager.getConnection("jdbc:sqlite:" + fileDir + File.separator + fileName);
 			this.st = con.createStatement();
 			
 			//Set the query timeout

@@ -17,7 +17,7 @@ public class LevelCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("pvplevels.change")) {
-			sender.sendMessage("§4You don't have permission for this command!");
+			sender.sendMessage("\2474You don't have permission for this command!");
 			return true;
 		}
 		
@@ -36,17 +36,17 @@ public class LevelCommand implements CommandExecutor {
 					} else if(args[0].equalsIgnoreCase("set")) {
 						level = Math.min(Math.max(value, maxLevel), 0);
 					} else {
-						sender.sendMessage("§4INvalid argument '" + args[0] + "'!");
+						sender.sendMessage("\2474INvalid argument '" + args[0] + "'!");
 						return true;
 					}
 					
 					pp.set("level", level);
-					sender.sendMessage("§aLevel set to '" + level + "'!");
+					sender.sendMessage("\247aLevel set to '" + level + "'!");
 				} catch(Exception e) {
-					sender.sendMessage("§4INvalid number '" + args[2] + "'!");
+					sender.sendMessage("\2474INvalid number '" + args[2] + "'!");
 				}
 			} else
-				sender.sendMessage("§4Player not found on database!");
+				sender.sendMessage("\2474Player not found on database!");
 		}
 		
 		return true;

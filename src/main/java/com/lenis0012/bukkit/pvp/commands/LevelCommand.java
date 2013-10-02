@@ -43,7 +43,7 @@ public class LevelCommand implements CommandExecutor {
 					pp.set("level", level);
 					sender.sendMessage("\247aLevel set to '" + level + "'!");
 				} catch(Exception e) {
-					sender.sendMessage("\2474INvalid number '" + args[2] + "'!");
+					sender.sendMessage("\2474Invalid number '" + args[2] + "'!");
 				}
 			} else
 				sender.sendMessage("\2474Player not found on database!");

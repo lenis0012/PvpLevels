@@ -52,12 +52,7 @@ public class PvpLevels extends JavaPlugin {
 			this.copy(this.getResource("config.yml"), configFile);
 			this.reloadConfig();
 			this.saveConfig();
-		} else {
-			Configuration def = YamlConfiguration.loadConfiguration(this.getResource("config.yml"));
-			this.getConfig().setDefaults(def);
-			//this.getConfig().options().copyDefaults(true);
-			//this.saveConfig();
-		}
+		} 
 		
 		if(!rewardsFile.exists()) {
 			this.getLogger().info("Creating default rewards.yml");
@@ -67,6 +62,8 @@ public class PvpLevels extends JavaPlugin {
 		} else {
 			this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
 			if(rewards.getInt("version") < CONFIG_VERSION) {
+				rewardsFile.renameTo(new File(this.getDataFolder(), "rewards_backup.yml"));
+				this.copy(this.getResource("README.txt"), new File(this.getDataFolder(), "README.txt"));
 				this.copy(this.getResource("rewards.yml"), rewardsFile);
 				this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
 				this.getLogger().log(Level.WARNING, "Rewards.yml has been updated! all options have been reset to fedault.");

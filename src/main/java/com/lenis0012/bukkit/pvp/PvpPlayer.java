@@ -1,6 +1,7 @@
 package com.lenis0012.bukkit.pvp;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,13 +48,14 @@ public class PvpPlayer {
 		this.set("lastlogin", days(Calendar.getInstance()));
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void reward(Player player) {
 		PvpLevels plugin = PvpLevels.instance;
 		String lvl = String.valueOf(this.get("level"));
 		if((Boolean) plugin.getReward(lvl, "item.use")) {
-			int id = (Integer) plugin.getReward(lvl, "item.id");
+			String itemName = (String) plugin.getReward(lvl, "item.name");
 			int amount = (Integer) plugin.getReward(lvl, "item.amount");
-			Material type = Material.getMaterial(id);
+			Material type = Material.getMaterial(itemName);
 			ItemStack it = new ItemStack(type, amount);
 			player.getInventory().addItem(it);
 			player.sendMessage(ChatColor.GREEN+"You gained "+amount+" of "+
@@ -61,16 +63,18 @@ public class PvpPlayer {
 		}
 			
 		if((Boolean) plugin.getReward(lvl, "money.use")) {
-			int amount = (Integer) plugin.getReward(lvl, "money.amount");
+			double amount = (Double) plugin.getReward(lvl, "money.amount");
 			plugin.getHook("Vault").invoke(player.getName(), amount, VaultHook.DEPOSIT);
 			player.sendMessage(ChatColor.GREEN+"You gained "+amount+"$");
 		}
 			
-		if((Boolean) plugin.getReward(lvl, "command.use")) {
-			String cmd = (String) plugin.getReward(lvl, "command.command");
-			cmd = cmd.replace("{User}", player.getName());
-			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-			Bukkit.getServer().dispatchCommand(console, cmd);
+		if((Boolean) plugin.getReward(lvl, "commands.use")) {
+			List<String> cmds = (List<String>) plugin.getReward(lvl, "commands.commands");
+			for(String cmd : cmds) {
+				cmd = cmd.replace("{User}", player.getName());
+				ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+				Bukkit.getServer().dispatchCommand(console, cmd);
+			}
 		}
 	}
 	

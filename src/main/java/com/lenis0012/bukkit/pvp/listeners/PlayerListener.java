@@ -32,6 +32,8 @@ public class PlayerListener implements Listener {
 			format = format.replace(toReplace, lvl);
 		else
 			format = "["+ChatColor.GREEN+"Lvl "+lvl+ChatColor.WHITE+"] "+format;
+		if(format.contains("[KDR]"))
+			format = format.replace("[KDR]", String.valueOf(PvpLevels.getKdr(pp)));
 		
 		event.setFormat(format);
 	}

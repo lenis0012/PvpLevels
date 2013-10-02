@@ -1,9 +1,12 @@
 name: PvpLevels
-version: 2.0
+version: 1.1
 main: com.lenis0012.bukkit.pvp.PvpLevels
-description: Fair pvp in minecraft
+description: Better pvp in minecraft
 author: lenis0012
 commands:
   kdr:
     description: PvpLevels KDR command.
     usage: /kdr
+  level:
+    description: Change a player level.
+    usage: /level <add/remove/set> <player> <amount>

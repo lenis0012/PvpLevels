@@ -2,6 +2,8 @@ package com.lenis0012.bukkit.pvp.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,8 +40,13 @@ public class StackUtil {
 		PrintWriter pw = new PrintWriter(sw);
 		t.printStackTrace(pw);
 		String[] sts = sw.toString().replace("\r", "").split("\n");
-		StackTraceElement[] elements = t.getStackTrace();
-		String[] out = new String[sts.length + (elements.length * 4) + 9];
+		StackTraceElement[] rawElements = t.getStackTrace();
+		List<StackTraceElement> elements = new ArrayList<StackTraceElement>();
+		for(StackTraceElement element : rawElements) {
+			if(element.getClassName().contains("lenis0012"))
+				elements.add(element);
+		}
+		String[] out = new String[sts.length + (elements.size() * 4) + 9];
 		out[0] = (prefix + ChatColor.RED + "Internal error!");
 		out[1] = (prefix + "If this bug has not been reported please open a ticket at BukkitDev");
 		out[2] = (prefix + "Include the following into your bug report:");

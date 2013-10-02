@@ -1,27 +1,31 @@
+# Do not edit 'version'
+version: 1
 rewards:
-  #Item being given
+  # Item being given
   item:
     use: true
-    id: 264
+    name: 'diamond'
     amount: 1
   # Money being given (uses Vault)
   money:
     use: false
     amount: 50.0
   # Command being executed
-  command:
+  commands:
     use: false
-    command: '/say {User} has reached a new level!'
+    commands:
+    - '/say {User} has reached a new level!'
   # Level rewards, for each level
   level:
     '10':
       item:
         use: false
-        id: 164
+        name: 'diamond'
         amount: 1
       money:
         use: false
         amount: 50.0
-      command:
+      commands:
         use: false
-        command: '/say {User} has reached level 10'
+        commands:
+        - '/say {User} has reached level 10'

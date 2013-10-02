@@ -9,13 +9,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lenis0012.bukkit.pvp.commands.KdrCommand;
+import com.lenis0012.bukkit.pvp.commands.LevelCommand;
 import com.lenis0012.bukkit.pvp.data.DataManager;
 import com.lenis0012.bukkit.pvp.data.MySQL;
 import com.lenis0012.bukkit.pvp.data.SQLThread;
@@ -29,6 +32,7 @@ import com.lenis0012.bukkit.pvp.listeners.ServerListener;
 import com.lenis0012.bukkit.pvp.utils.MathUtil;
 
 public class PvpLevels extends JavaPlugin {
+	public static int CONFIG_VERSION = 1;
 	public static PvpLevels instance;
 	private DataManager sqlControler;
 	private SQLThread sql_thread;
@@ -47,12 +51,26 @@ public class PvpLevels extends JavaPlugin {
 			this.getDataFolder().mkdirs();
 			this.copy(this.getResource("config.yml"), configFile);
 			this.reloadConfig();
+			this.saveConfig();
+		} else {
+			Configuration def = YamlConfiguration.loadConfiguration(this.getResource("config.yml"));
+			this.getConfig().setDefaults(def);
+			//this.getConfig().options().copyDefaults(true);
+			//this.saveConfig();
 		}
 		
 		if(!rewardsFile.exists()) {
 			this.getLogger().info("Creating default rewards.yml");
 			this.getDataFolder().mkdirs();
 			this.copy(this.getResource("rewards.yml"), rewardsFile);
+			this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
+		} else {
+			this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
+			if(rewards.getInt("version") < CONFIG_VERSION) {
+				this.copy(this.getResource("rewards.yml"), rewardsFile);
+				this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
+				this.getLogger().log(Level.WARNING, "Rewards.yml has been updated! all options have been reset to fedault.");
+			}
 		}
 		
 		PluginManager pm = this.getServer().getPluginManager();
@@ -65,7 +83,6 @@ public class PvpLevels extends JavaPlugin {
 				"lastlogin INT");
 		this.sqlControler = this.createSqlControler(config, "data");
 		this.sqlControler.setTable(table);
-		this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
 		this.sql_thread = new SQLThread(this.sqlControler, 300);
 		sql_thread.start();
 		
@@ -74,6 +91,7 @@ public class PvpLevels extends JavaPlugin {
 		pm.registerEvents(new EntityListener(this), this);
 		pm.registerEvents(new ServerListener(this), this);
 		getCommand("kdr").setExecutor(new KdrCommand());
+		getCommand("level").setExecutor(new LevelCommand(this));
 		
 		//Create hooks
 		Hook vault = new VaultHook("Vault");
@@ -150,5 +168,25 @@ public class PvpLevels extends JavaPlugin {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public static double getKdr(PvpPlayer pp) {
+		int kills = pp.get("kills");
+		int deaths = pp.get("deaths");
+		
+		if(kills == 0 && deaths == 0)
+			return 1;
+		else if(kills > 0 && deaths == 0) {
+			return kills;
+		} else if(deaths > 0 && kills == 0) {
+			return deaths;
+		} else {
+			return MathUtil.round(kills / (double) deaths, 2);
+		}
+	}
+	
+	public String fixColors(String message) {
+		return message.replaceAll("&", "\247");
 	}
 }

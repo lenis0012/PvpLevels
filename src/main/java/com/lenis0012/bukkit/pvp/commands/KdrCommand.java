@@ -19,10 +19,11 @@ public class KdrCommand implements CommandExecutor {
 			return true;
 		}
 		
+		PvpLevels plugin = PvpLevels.instance;
 		Player player = (Player) sender;
 		if(args.length == 0) {
 			if(player.hasPermission("pvp.kdr.self")) {
-				PvpPlayer pp = new PvpPlayer(player.getName());
+				PvpPlayer pp = plugin.getPlayer(player);
 				double kdr = PvpLevels.getKdr(pp);
 				player.sendMessage(ChatColor.GREEN + "Kill death ratio: " + ChatColor.WHITE + String.valueOf(kdr));
 			} else
@@ -31,7 +32,7 @@ public class KdrCommand implements CommandExecutor {
 			if(player.hasPermission("pvp.kdr.orther")) {
 				Player target = Bukkit.getPlayer(args[0]);
 				if(target != null) {
-					PvpPlayer pp = new PvpPlayer(target.getName());
+					PvpPlayer pp = plugin.getPlayer(target);
 					double kdr = PvpLevels.getKdr(pp);
 					player.sendMessage(ChatColor.GREEN + "Kill death ratio ("+args[0]+"): " + ChatColor.WHITE + String.valueOf(kdr));
 				} else

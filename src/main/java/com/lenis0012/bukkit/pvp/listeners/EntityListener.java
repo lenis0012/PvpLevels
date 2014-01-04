@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,8 +50,8 @@ public class EntityListener implements Listener {
 			Player attacker = aname == null ? null : Bukkit.getPlayer(aname);
 			
 			if(attacker != null && attacker.isOnline()) {
-				PvpPlayer pp = new PvpPlayer(aname);
-				PvpPlayer dpp = new PvpPlayer(dname);
+				PvpPlayer pp = plugin.getPlayer(attacker);
+				PvpPlayer dpp = plugin.getPlayer(defender);
 				
 				if(killer.containsKey(aname)) {
 					String value = killer.get(aname);
@@ -73,16 +72,24 @@ public class EntityListener implements Listener {
 					killer.put(aname, dname+';'+'1');
 				}
 				
-				int kills = pp.get("kills");
-				int lvl = pp.get("level");
+				int kills = pp.getKills();
+				int killstreak = pp.getKillstreak() + 1;
+				int lvl = pp.getLevel();
 				kills += 1;
-				pp.set("kills", kills);
-				dpp.set("deaths", dpp.get("deaths") + 1);
+				pp.setKills(kills);
+				pp.setKillstreak(killstreak);
+				dpp.setDeaths(dpp.getDeaths() + 1);
+				dpp.setKillstreak(0);
+				
+				double d = killstreak / 5.0D;
+				if(String.valueOf(d).endsWith(".0")) {
+					Bukkit.broadcastMessage("\247a" + aname + " has reached a killstreak of \2477" + killstreak + "\247a!");
+				}
 				
 				if(plugin.levelList.contains(kills)) {
 					lvl += 1;
-					pp.set("level", lvl);
-					attacker.sendMessage(ChatColor.GREEN + "Level up!");
+					pp.setLevel(lvl);
+					Bukkit.broadcastMessage("\247a" + aname + "has reached level \2477" + lvl + "\247a!");
 					pp.reward(attacker);
 				}
 			}

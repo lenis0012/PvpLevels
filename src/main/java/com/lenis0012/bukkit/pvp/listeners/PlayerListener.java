@@ -22,11 +22,10 @@ public class PlayerListener implements Listener {
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
-		String name = player.getName();
 		String format = event.getFormat();
-		PvpPlayer pp = new PvpPlayer(name);
+		PvpPlayer pp = plugin.getPlayer(player);
 		
-		String lvl = String.valueOf(pp.get("level"));
+		String lvl = String.valueOf(pp.getLevel());
 		String toReplace = plugin.getConfig().getString("replace-string", "[LEVEL]");
 		if(format.contains(toReplace))
 			format = format.replace(toReplace, lvl);
@@ -41,22 +40,12 @@ public class PlayerListener implements Listener {
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		String name = player.getName();
-		PvpPlayer pp = new PvpPlayer(name);
-		
-		if(!pp.isCreated())
-			pp.create();
-		else
-			pp.update();
+		plugin.loadPlayer(player);
 	}
 	
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		String name = player.getName();
-		PvpPlayer pp = new PvpPlayer(name);
-		
-		if(pp.isCreated())
-			pp.update();
+		plugin.unloadPlayer(player);
 	}
 }

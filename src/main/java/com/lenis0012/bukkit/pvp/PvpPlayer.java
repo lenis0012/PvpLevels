@@ -18,9 +18,19 @@ public class PvpPlayer {
 	private String name;
 	private DataManager sql;
 	
-	public PvpPlayer(String playerName) {
+	//Lets store all values local
+	private int killstreak;
+	private int kills;
+	private int deaths;
+	private int level;
+	
+	protected PvpPlayer(String playerName) {
 		this.name = playerName;
 		this.sql = PvpLevels.instance.getSqlControler();
+		this.kills = get("kills");
+		this.deaths = get("deaths");
+		this.level = get("level");
+		this.killstreak = 0;
 	}
 	
 	public boolean isCreated() {
@@ -36,16 +46,51 @@ public class PvpPlayer {
 		sql.set(name, lvl, kills, deaths, lastLogin);
 	}
 	
-	public void set(String index, int value) {
+	private void set(String index, int value) {
 		sql.update("username", index, name, value);
 	}
 	
-	public int get(String index) {
+	private int get(String index) {
 		return (Integer) sql.get("username", index, name);
 	}
 	
-	public void update() {
-		this.set("lastlogin", days(Calendar.getInstance()));
+	public int getKills() {
+		return kills;
+	}
+
+	public void setKills(int kills) {
+		this.kills = kills;
+	}
+
+	public int getDeaths() {
+		return deaths;
+	}
+
+	public void setDeaths(int deaths) {
+		this.deaths = deaths;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public void setKillstreak(int killstreak) {
+		this.killstreak = killstreak;
+	}
+	
+	public int getKillstreak() {
+		return this.killstreak;
+	}
+	
+	public void save() {
+		set("kills", this.kills);
+		set("deaths", this.deaths);
+		set("level", this.level);
+		set("lastlogin", days(Calendar.getInstance()));
 	}
 	
 	@SuppressWarnings("unchecked")

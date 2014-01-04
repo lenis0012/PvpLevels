@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,6 +38,7 @@ public class PvpLevels extends JavaPlugin {
 	private SQLThread sql_thread;
 	private Map<String, Hook> hooks = new HashMap<String, Hook>();
 	private FileConfiguration rewards;
+	private Map<String, PvpPlayer> players = new HashMap<String, PvpPlayer>();
 	
 	public List<Integer> levelList = new ArrayList<Integer>();
 	
@@ -113,6 +114,36 @@ public class PvpLevels extends JavaPlugin {
 		this.sqlControler.close();
 	}
 	
+	public PvpPlayer getPlayer(Player player) {
+		return players.get(player.getName());
+	}
+	
+	/**
+	 * Load unsafe pvp player.
+	 * This will NOT auto save.
+	 * 
+	 * @param name Player name
+	 * @return Unsafe pvp player
+	 */
+	public PvpPlayer getPlayer(String name) {
+		return new PvpPlayer(name);
+	}
+	
+	public void loadPlayer(Player player) {
+		PvpPlayer pp = new PvpPlayer(player.getName());
+		players.put(player.getName(), pp);
+		if(!pp.isCreated()) {
+			pp.create();
+		}
+	}
+	
+	public void unloadPlayer(Player player) {
+		PvpPlayer pp = players.remove(player.getName());
+		if(pp != null) {
+			pp.save();
+		}
+	}
+	
 	public DataManager getSqlControler() {
 		return this.sqlControler;
 	}
@@ -169,8 +200,8 @@ public class PvpLevels extends JavaPlugin {
 	
 	
 	public static double getKdr(PvpPlayer pp) {
-		int kills = pp.get("kills");
-		int deaths = pp.get("deaths");
+		int kills = pp.getKills();
+		int deaths = pp.getDeaths();
 		
 		if(kills == 0 && deaths == 0)
 			return 1;

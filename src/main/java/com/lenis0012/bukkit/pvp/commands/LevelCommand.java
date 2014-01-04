@@ -23,10 +23,10 @@ public class LevelCommand implements CommandExecutor {
 		
 		if(args.length > 2) {
 			String user = args[1];
-			PvpPlayer pp = new PvpPlayer(user);
+			PvpPlayer pp = plugin.getPlayer(user);
 			if(pp.isCreated()) {
 				try {
-					int level = pp.get("level");
+					int level = pp.getLevel();
 					int value = Integer.parseInt(args[2]);
 					int maxLevel = plugin.getConfig().getInt("settings.max-level", 100);
 					if(args[0].equalsIgnoreCase("add")) {
@@ -40,7 +40,8 @@ public class LevelCommand implements CommandExecutor {
 						return true;
 					}
 					
-					pp.set("level", level);
+					pp.setLevel(level);
+					pp.save(); //Very important
 					sender.sendMessage("\247aLevel set to '" + level + "'!");
 				} catch(Exception e) {
 					sender.sendMessage("\2474Invalid number '" + args[2] + "'!");

@@ -27,10 +27,12 @@ public class PvpPlayer {
 	protected PvpPlayer(String playerName) {
 		this.name = playerName;
 		this.sql = PvpLevels.instance.getSqlControler();
-		this.kills = get("kills");
-		this.deaths = get("deaths");
-		this.level = get("level");
-		this.killstreak = 0;
+		if(this.isCreated()) {
+			this.kills = get("kills");
+			this.deaths = get("deaths");
+			this.level = get("level");
+			this.killstreak = 0;
+		}
 	}
 	
 	public boolean isCreated() {

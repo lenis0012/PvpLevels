@@ -89,7 +89,7 @@ public class EntityListener implements Listener {
 				if(plugin.levelList.contains(kills)) {
 					lvl += 1;
 					pp.setLevel(lvl);
-					Bukkit.broadcastMessage("\247a" + aname + "has reached level \2477" + lvl + "\247a!");
+					Bukkit.broadcastMessage("\247a" + aname + " has reached level \2477" + lvl + "\247a!");
 					pp.reward(attacker);
 				}
 			}

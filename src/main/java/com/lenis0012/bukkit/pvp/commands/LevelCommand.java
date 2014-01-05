@@ -36,7 +36,7 @@ public class LevelCommand implements CommandExecutor {
 					} else if(args[0].equalsIgnoreCase("set")) {
 						level = Math.min(Math.max(value, maxLevel), 0);
 					} else {
-						sender.sendMessage("\2474INvalid argument '" + args[0] + "'!");
+						sender.sendMessage("\2474Invalid argument '" + args[0] + "'!");
 						return true;
 					}
 					
@@ -48,7 +48,8 @@ public class LevelCommand implements CommandExecutor {
 				}
 			} else
 				sender.sendMessage("\2474Player not found on database!");
-		}
+		} else
+			sender.sendMessage("\247cNot enough aruments!");
 		
 		return true;
 	}

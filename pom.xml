@@ -4,7 +4,7 @@
 
   <groupId>com.lenis0012.bukkit</groupId>
   <artifactId>PvpLevels</artifactId>
-  <version>1.2</version>
+  <version>1.2.1</version>
   <packaging>jar</packaging>
 
   <name>PvpLevels</name>

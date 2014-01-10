@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import com.lenis0012.bukkit.pvp.data.DataManager;
 import com.lenis0012.bukkit.pvp.hooks.VaultHook;
 import com.lenis0012.bukkit.pvp.utils.MathUtil;
+import com.lenis0012.bukkit.pvp.utils.StackUtil;
 
 public class PvpPlayer {
 	private String name;
@@ -97,31 +98,35 @@ public class PvpPlayer {
 	
 	@SuppressWarnings("unchecked")
 	public void reward(Player player) {
-		PvpLevels plugin = PvpLevels.instance;
-		String lvl = String.valueOf(this.get("level"));
-		if((Boolean) plugin.getReward(lvl, "item.use")) {
-			String itemName = (String) plugin.getReward(lvl, "item.name");
-			int amount = (Integer) plugin.getReward(lvl, "item.amount");
-			Material type = Material.getMaterial(itemName);
-			ItemStack it = new ItemStack(type, amount);
-			player.getInventory().addItem(it);
-			player.sendMessage(ChatColor.GREEN+"You gained "+amount+" of "+
-					type.toString().toLowerCase());
-		}
-			
-		if((Boolean) plugin.getReward(lvl, "money.use")) {
-			double amount = (Double) plugin.getReward(lvl, "money.amount");
-			plugin.getHook("Vault").invoke(player.getName(), amount, VaultHook.DEPOSIT);
-			player.sendMessage(ChatColor.GREEN+"You gained "+amount+"$");
-		}
-			
-		if((Boolean) plugin.getReward(lvl, "commands.use")) {
-			List<String> cmds = (List<String>) plugin.getReward(lvl, "commands.commands");
-			for(String cmd : cmds) {
-				cmd = cmd.replace("{User}", player.getName());
-				ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-				Bukkit.getServer().dispatchCommand(console, cmd);
+		try {
+			PvpLevels plugin = PvpLevels.instance;
+			String lvl = String.valueOf(this.get("level"));
+			if((Boolean) plugin.getReward(lvl, "item.use")) {
+				String itemName = (String) plugin.getReward(lvl, "item.name");
+				int amount = (Integer) plugin.getReward(lvl, "item.amount");
+				Material type = Material.getMaterial(itemName.toUpperCase());
+				ItemStack it = new ItemStack(type, amount);
+				player.getInventory().addItem(it);
+				player.sendMessage(ChatColor.GREEN+"You gained "+amount+" of "+
+						type.toString().toLowerCase());
 			}
+				
+			if((Boolean) plugin.getReward(lvl, "money.use")) {
+				double amount = (Double) plugin.getReward(lvl, "money.amount");
+				plugin.getHook("Vault").invoke(player.getName(), amount, VaultHook.DEPOSIT);
+				player.sendMessage(ChatColor.GREEN+"You gained "+amount+"$");
+			}
+				
+			if((Boolean) plugin.getReward(lvl, "commands.use")) {
+				List<String> cmds = (List<String>) plugin.getReward(lvl, "commands.commands");
+				for(String cmd : cmds) {
+					cmd = cmd.replace("{User}", player.getName());
+					ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+					Bukkit.getServer().dispatchCommand(console, cmd);
+				}
+			}
+		} catch(Throwable t) {
+			StackUtil.dumpStack(t); //Easy bug reprting
 		}
 	}
 	

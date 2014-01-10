@@ -2,20 +2,33 @@
 settings:
   replace-string: '[LEVEL]'
   max-level: 100
+  
   # Defines how much xtra kills you need for each level
   # In this example we take 4 as default kills and 1.0 as increment
   # lvl 1 = (4 * 1) + (1.0 * 0) = 4 kills.
   # lvl 10 = (4 * 10) + (1.0 * 10) = 50 kills.
   increment-value: 1.0
+  
   # Defines how much you allways need to level up (+ increment * lvl)
   default-kills: 4
+  
   # Defines how much a player can attack the same player as before.
   # Example: for value 3 --> after killing Notch 3 times it ignores killing notch
   kill-session: 3
+  
   # Shall we display the lvl next to the player's nametag? --> Notch<br>3 Levels
   display-lvl-below-name: true
+  
   # What text we should use for the below-name text (format = '<level> ' + text)
   lvl-below-name-txt: '&aLevels'
+  
+  # Message controling, disable/enable messages
+  # new-level: {player} has reached level X!
+  # killstreak: {player} has reached a killstreak of X! (On every 5 killstreaks. 5, 10, 15 etc.)
+  messages:
+    new-level: true
+    killstreak: true
+
 # MySQL settings
 MySQL:
   use: false
@@ -24,3 +37,6 @@ MySQL:
   database: 'bukkit'
   username: 'root'
   password: ''
+
+# Internal data, don't change this
+version: 1

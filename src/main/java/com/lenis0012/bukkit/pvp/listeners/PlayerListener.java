@@ -1,5 +1,6 @@
 package com.lenis0012.bukkit.pvp.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,8 +40,20 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		plugin.loadPlayer(player);
+		
+		if(PvpLevels.UNSAFE_CONFIG && player.isOp()) {
+		Bukkit.getScheduler().runTask(plugin, new Runnable() {
+
+			@Override
+			public void run() {
+				player.sendMessage("\247e\247lOne of your config files was changed!");
+				player.sendMessage("\247e\247lPlease read you \247a\247lREADME.txt \247e\247lin the pvplevels folder.");
+				player.sendMessage("\247cAfter editing your configs, remove README.txt");
+			}
+		});
+		}
 	}
 	
 	@EventHandler (priority = EventPriority.MONITOR)

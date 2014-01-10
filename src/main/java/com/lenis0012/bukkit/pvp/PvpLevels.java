@@ -32,7 +32,11 @@ import com.lenis0012.bukkit.pvp.listeners.ServerListener;
 import com.lenis0012.bukkit.pvp.utils.MathUtil;
 
 public class PvpLevels extends JavaPlugin {
-	public static int CONFIG_VERSION = 1;
+	public static final int REWARD_VERSION = 1;
+	public static final int CONFIG_VERSION = 1;
+	public static boolean ENABLE_LEVEL_MESSAGES = false;
+	public static boolean ENABLE_KILLSTREAK_MESSAGES = false;
+	public static boolean UNSAFE_CONFIG = false;
 	public static PvpLevels instance;
 	private DataManager sqlControler;
 	private SQLThread sql_thread;
@@ -52,8 +56,17 @@ public class PvpLevels extends JavaPlugin {
 			this.getDataFolder().mkdirs();
 			this.copy(this.getResource("config.yml"), configFile);
 			this.reloadConfig();
-			this.saveConfig();
-		} 
+		}  else {
+			FileConfiguration config = this.getConfig();
+			if(config.getInt("version") < CONFIG_VERSION) {
+				configFile.renameTo(new File(this.getDataFolder(), "config_backup.yml"));
+				this.copy(this.getResource("README.txt"), new File(this.getDataFolder(), "README.txt"));
+				this.copy(this.getResource("config.yml"), configFile);
+				this.reloadConfig();
+				this.getLogger().log(Level.WARNING, "config.yml has been updated! all options have been reset to fedault.");
+				UNSAFE_CONFIG = true;
+			}
+		}
 		
 		if(!rewardsFile.exists()) {
 			this.getLogger().info("Creating default rewards.yml");
@@ -62,12 +75,13 @@ public class PvpLevels extends JavaPlugin {
 			this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
 		} else {
 			this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
-			if(rewards.getInt("version") < CONFIG_VERSION) {
+			if(rewards.getInt("version") < REWARD_VERSION) {
 				rewardsFile.renameTo(new File(this.getDataFolder(), "rewards_backup.yml"));
 				this.copy(this.getResource("README.txt"), new File(this.getDataFolder(), "README.txt"));
 				this.copy(this.getResource("rewards.yml"), rewardsFile);
 				this.rewards = YamlConfiguration.loadConfiguration(rewardsFile);
-				this.getLogger().log(Level.WARNING, "Rewards.yml has been updated! all options have been reset to fedault.");
+				this.getLogger().log(Level.WARNING, "rewards.yml has been updated! all options have been reset to fedault.");
+				UNSAFE_CONFIG = true;
 			}
 		}
 		
@@ -83,6 +97,10 @@ public class PvpLevels extends JavaPlugin {
 		this.sqlControler.setTable(table);
 		this.sql_thread = new SQLThread(this.sqlControler, 300);
 		sql_thread.start();
+		
+		//Verify config data
+		ENABLE_LEVEL_MESSAGES = config.getBoolean("settings.messages.new-level", true);
+		ENABLE_KILLSTREAK_MESSAGES = config.getBoolean("settings.messages.killstreak", true);
 		
 		//Register commands & listeners
 		pm.registerEvents(new PlayerListener(this), this);

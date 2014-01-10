@@ -1,8 +1,10 @@
 package com.lenis0012.bukkit.pvp.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.lenis0012.bukkit.pvp.PvpLevels;
 import com.lenis0012.bukkit.pvp.PvpPlayer;
@@ -23,7 +25,14 @@ public class LevelCommand implements CommandExecutor {
 		
 		if(args.length > 2) {
 			String user = args[1];
-			PvpPlayer pp = plugin.getPlayer(user);
+			Player player = Bukkit.getPlayer(user);
+			PvpPlayer pp;
+			if(player != null && player.isOnline()) {
+				pp = plugin.getPlayer(player);
+			} else {
+				pp = plugin.getPlayer(user);
+			}
+			
 			if(pp.isCreated()) {
 				try {
 					int level = pp.getLevel();
@@ -41,8 +50,10 @@ public class LevelCommand implements CommandExecutor {
 					}
 					
 					pp.setLevel(level);
-					pp.save(); //Very important
 					sender.sendMessage("\247aLevel set to '" + level + "'!");
+					if(player == null || !player.isOnline()) {
+						pp.save(); //Very important
+					}
 				} catch(Exception e) {
 					sender.sendMessage("\2474Invalid number '" + args[2] + "'!");
 				}

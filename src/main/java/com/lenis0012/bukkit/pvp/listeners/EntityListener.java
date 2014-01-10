@@ -82,15 +82,17 @@ public class EntityListener implements Listener {
 				dpp.setKillstreak(0);
 				
 				double d = killstreak / 5.0D;
-				if(String.valueOf(d).endsWith(".0")) {
+				if(String.valueOf(d).endsWith(".0") && PvpLevels.ENABLE_KILLSTREAK_MESSAGES) {
 					Bukkit.broadcastMessage("\247a" + aname + " has reached a killstreak of \2477" + killstreak + "\247a!");
 				}
 				
 				if(plugin.levelList.contains(kills)) {
 					lvl += 1;
 					pp.setLevel(lvl);
-					Bukkit.broadcastMessage("\247a" + aname + " has reached level \2477" + lvl + "\247a!");
 					pp.reward(attacker);
+					if(PvpLevels.ENABLE_LEVEL_MESSAGES) {
+						Bukkit.broadcastMessage("\247a" + aname + " has reached level \2477" + lvl + "\247a!");
+					}
 				}
 			}
 		}

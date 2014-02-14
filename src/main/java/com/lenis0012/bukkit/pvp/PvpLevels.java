@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -128,6 +129,11 @@ public class PvpLevels extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			//Force unload all players
+			this.unloadPlayer(player);
+		}
+		
 		sql_thread.interrupt();
 		this.sqlControler.close();
 	}
@@ -215,7 +221,6 @@ public class PvpLevels extends JavaPlugin {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	public static double getKdr(PvpPlayer pp) {
 		int kills = pp.getKills();

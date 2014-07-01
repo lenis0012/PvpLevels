@@ -44,15 +44,15 @@ public class PlayerListener implements Listener {
 		plugin.loadPlayer(player);
 		
 		if(PvpLevels.UNSAFE_CONFIG && player.isOp()) {
-		Bukkit.getScheduler().runTask(plugin, new Runnable() {
-
-			@Override
-			public void run() {
-				player.sendMessage("\247e\247lOne of your config files was changed!");
-				player.sendMessage("\247e\247lPlease read you \247a\247lREADME.txt \247e\247lin the pvplevels folder.");
-				player.sendMessage("\247cAfter editing your configs, remove README.txt");
-			}
-		});
+			Bukkit.getScheduler().runTask(plugin, new Runnable() {
+	
+				@Override
+				public void run() {
+					player.sendMessage("\247e\247lOne of your config files was changed!");
+					player.sendMessage("\247e\247lPlease read you \247a\247lREADME.txt \247e\247lin the pvplevels folder.");
+					player.sendMessage("\247cAfter editing your configs, remove README.txt");
+				}
+			});
 		}
 	}
 	

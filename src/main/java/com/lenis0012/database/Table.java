@@ -1,4 +1,4 @@
-package com.lenis0012.bukkit.pvp.data;
+package com.lenis0012.database;
 
 public class Table {
 	private String name;

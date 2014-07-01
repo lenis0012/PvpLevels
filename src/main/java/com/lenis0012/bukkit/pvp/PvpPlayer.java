@@ -10,14 +10,14 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.lenis0012.bukkit.pvp.data.DataManager;
 import com.lenis0012.bukkit.pvp.hooks.VaultHook;
 import com.lenis0012.bukkit.pvp.utils.MathUtil;
 import com.lenis0012.bukkit.pvp.utils.StackUtil;
+import com.lenis0012.database.Database;
 
 public class PvpPlayer {
-	private String name;
-	private DataManager sql;
+	private String uuid;
+	private Database database;
 	
 	//Lets store all values local
 	private int killstreak;
@@ -25,19 +25,27 @@ public class PvpPlayer {
 	private int deaths;
 	private int level;
 	
-	protected PvpPlayer(String playerName) {
-		this.name = playerName;
-		this.sql = PvpLevels.instance.getSqlControler();
-		if(this.isCreated()) {
-			this.kills = get("kills");
-			this.deaths = get("deaths");
-			this.level = get("level");
-			this.killstreak = 0;
-		}
+	protected PvpPlayer(String uuid) {
+		this.uuid = uuid;
+		this.database = PvpLevels.instance.getSQLDatabase();
+		new Thread() {
+			
+			@Override
+			public void run() {
+				if(isCreated()) {
+					kills = get("kills");
+					deaths = get("deaths");
+					level = get("level");
+					killstreak = 0;
+				} else {
+					create();
+				}
+			}
+		}.start();
 	}
 	
-	public boolean isCreated() {
-		return sql.contains("username", name);
+	private boolean isCreated() {
+		return database.contains(Tables.ACCOUNTS, "uuid", uuid);
 	}
 	
 	public void create() {
@@ -46,15 +54,15 @@ public class PvpPlayer {
 		int deaths = 0;
 		int lastLogin = days(Calendar.getInstance());
 		
-		sql.set(name, lvl, kills, deaths, lastLogin);
+		database.set(Tables.ACCOUNTS, uuid, lvl, kills, deaths, lastLogin);
 	}
 	
 	private void set(String index, int value) {
-		sql.update("username", index, name, value);
+		database.update(Tables.ACCOUNTS, "uuid", index, uuid, value);
 	}
 	
 	private int get(String index) {
-		return (Integer) sql.get("username", index, name);
+		return (Integer) database.get(Tables.ACCOUNTS, "uuid", index, uuid);
 	}
 	
 	public int getKills() {
@@ -90,10 +98,18 @@ public class PvpPlayer {
 	}
 	
 	public void save() {
-		set("kills", this.kills);
-		set("deaths", this.deaths);
-		set("level", this.level);
-		set("lastlogin", days(Calendar.getInstance()));
+		new Thread() {
+			
+			@Override
+			public void run() {
+				if(isCreated()) {
+					set("kills", kills);
+					set("deaths", deaths);
+					set("level", level);
+					set("lastlogin", days(Calendar.getInstance()));
+				}
+			}
+		}.start();
 	}
 	
 	@SuppressWarnings("unchecked")

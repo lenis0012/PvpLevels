@@ -20,17 +20,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.lenis0012.bukkit.pvp.commands.KdrCommand;
 import com.lenis0012.bukkit.pvp.commands.LevelCommand;
-import com.lenis0012.bukkit.pvp.data.DataManager;
-import com.lenis0012.bukkit.pvp.data.MySQL;
-import com.lenis0012.bukkit.pvp.data.SQLThread;
-import com.lenis0012.bukkit.pvp.data.SQLite;
-import com.lenis0012.bukkit.pvp.data.Table;
+import com.lenis0012.bukkit.pvp.conversion.UUIDConverter;
 import com.lenis0012.bukkit.pvp.hooks.Hook;
 import com.lenis0012.bukkit.pvp.hooks.VaultHook;
 import com.lenis0012.bukkit.pvp.listeners.EntityListener;
 import com.lenis0012.bukkit.pvp.listeners.PlayerListener;
 import com.lenis0012.bukkit.pvp.listeners.ServerListener;
 import com.lenis0012.bukkit.pvp.utils.MathUtil;
+import com.lenis0012.database.Database;
+import com.lenis0012.database.DatabaseConfigBuilder;
+import com.lenis0012.database.DatabaseFactory;
 
 public class PvpLevels extends JavaPlugin {
 	public static final int REWARD_VERSION = 1;
@@ -39,8 +38,7 @@ public class PvpLevels extends JavaPlugin {
 	public static boolean ENABLE_KILLSTREAK_MESSAGES = false;
 	public static boolean UNSAFE_CONFIG = false;
 	public static PvpLevels instance;
-	private DataManager sqlControler;
-	private SQLThread sql_thread;
+	private Database database;
 	private Map<String, Hook> hooks = new HashMap<String, Hook>();
 	private FileConfiguration rewards;
 	private Map<String, PvpPlayer> players = new HashMap<String, PvpPlayer>();
@@ -88,16 +86,13 @@ public class PvpLevels extends JavaPlugin {
 		
 		PluginManager pm = this.getServer().getPluginManager();
 		FileConfiguration config = this.getConfig();
-		Table table = new Table("accounts",
-				"username VARCHAR(50) NOT NULL UNIQUE," +
-				"level INT," +
-				"kills INT," +
-				"deaths INT," +
-				"lastlogin INT");
-		this.sqlControler = this.createSqlControler(config, "data");
-		this.sqlControler.setTable(table);
-		this.sql_thread = new SQLThread(this.sqlControler, 300);
-		sql_thread.start();
+		
+		//Database
+		DatabaseFactory databaseFactory = new DatabaseFactory(this);
+		databaseFactory.registerConverter(new UUIDConverter());
+		this.database = databaseFactory.getDatabase(new DatabaseConfigBuilder(config.getConfigurationSection("MySQL"), new File(getDataFolder(), "database.db")));
+		try { database.connect(); } catch(Exception e) { e.printStackTrace(); }
+		database.registerTable(Tables.ACCOUNTS);
 		
 		//Verify config data
 		ENABLE_LEVEL_MESSAGES = config.getBoolean("settings.messages.new-level", true);
@@ -134,8 +129,7 @@ public class PvpLevels extends JavaPlugin {
 			this.unloadPlayer(player);
 		}
 		
-		sql_thread.interrupt();
-		this.sqlControler.close();
+		database.close();
 	}
 	
 	public PvpPlayer getPlayer(Player player) {
@@ -156,9 +150,6 @@ public class PvpLevels extends JavaPlugin {
 	public void loadPlayer(Player player) {
 		PvpPlayer pp = new PvpPlayer(player.getName());
 		players.put(player.getName(), pp);
-		if(!pp.isCreated()) {
-			pp.create();
-		}
 	}
 	
 	public void unloadPlayer(Player player) {
@@ -168,8 +159,8 @@ public class PvpLevels extends JavaPlugin {
 		}
 	}
 	
-	public DataManager getSqlControler() {
-		return this.sqlControler;
+	public Database getSQLDatabase() {
+		return database;
 	}
 	
 	public Hook getHook(String name) {
@@ -196,13 +187,6 @@ public class PvpLevels extends JavaPlugin {
 			else
 				return null;
 		}
-	}
-	
-	private DataManager createSqlControler(FileConfiguration config, String fileName) {
-		if(config.getBoolean("MySQL.use", false))
-			return new MySQL(config);
-		else
-			return new SQLite(this.getDataFolder().getPath(), fileName+".db");
 	}
 	
 	private void copy(InputStream from, File to) {

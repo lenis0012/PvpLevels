@@ -33,32 +33,29 @@ public class LevelCommand implements CommandExecutor {
 				pp = plugin.getPlayer(user);
 			}
 			
-			if(pp.isCreated()) {
-				try {
-					int level = pp.getLevel();
-					int value = Integer.parseInt(args[2]);
-					int maxLevel = plugin.getConfig().getInt("settings.max-level", 100);
-					if(args[0].equalsIgnoreCase("add")) {
-						level = Math.min(level + value, maxLevel);
-					} else if(args[0].equalsIgnoreCase("remove")) {
-						level = Math.max(level - value, 0);
-					} else if(args[0].equalsIgnoreCase("set")) {
-						level = Math.min(Math.max(value, maxLevel), 0);
-					} else {
-						sender.sendMessage("\2474Invalid argument '" + args[0] + "'!");
-						return true;
-					}
-					
-					pp.setLevel(level);
-					sender.sendMessage("\247aLevel set to '" + level + "'!");
-					if(player == null || !player.isOnline()) {
-						pp.save(); //Very important
-					}
-				} catch(Exception e) {
-					sender.sendMessage("\2474Invalid number '" + args[2] + "'!");
+			try {
+				int level = pp.getLevel();
+				int value = Integer.parseInt(args[2]);
+				int maxLevel = plugin.getConfig().getInt("settings.max-level", 100);
+				if(args[0].equalsIgnoreCase("add")) {
+					level = Math.min(level + value, maxLevel);
+				} else if(args[0].equalsIgnoreCase("remove")) {
+					level = Math.max(level - value, 0);
+				} else if(args[0].equalsIgnoreCase("set")) {
+					level = Math.min(Math.max(value, maxLevel), 0);
+				} else {
+					sender.sendMessage("\2474Invalid argument '" + args[0] + "'!");
+					return true;
 				}
-			} else
-				sender.sendMessage("\2474Player not found on database!");
+				
+				pp.setLevel(level);
+				sender.sendMessage("\247aLevel set to '" + level + "'!");
+				if(player == null || !player.isOnline()) {
+					pp.save(); //Very important
+				}
+			} catch(Exception e) {
+				sender.sendMessage("\2474Invalid number '" + args[2] + "'!");
+			}
 		} else
 			sender.sendMessage("\247cNot enough aruments!");
 		

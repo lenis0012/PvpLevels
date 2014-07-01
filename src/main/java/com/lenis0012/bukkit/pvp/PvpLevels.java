@@ -34,7 +34,7 @@ import com.lenis0012.database.DatabaseFactory;
 
 public class PvpLevels extends JavaPlugin {
 	public static final int REWARD_VERSION = 1;
-	public static final int CONFIG_VERSION = 1;
+	public static final int CONFIG_VERSION = 2;
 	public static boolean ENABLE_LEVEL_MESSAGES = false;
 	public static boolean ENABLE_KILLSTREAK_MESSAGES = false;
 	public static boolean UNSAFE_CONFIG = false;

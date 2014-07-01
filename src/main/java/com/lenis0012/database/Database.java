@@ -16,11 +16,13 @@ public class Database {
 	private final DatabaseFactory databaseFactory;
 	private final String connectionUrl;
 	private final String driver;
+	private final String database;
 	private Connection connection;
 	
 	protected Database(DatabaseFactory databaseFactory, DatabaseConfigBuilder builder) {
 		this.databaseFactory = databaseFactory;
 		this.driver = builder.getDriver();
+		this.database = builder.getDatabase();
 		if(builder.getFile() != null) {
 			//Use SQLITE
 			this.connectionUrl = String.format(SQLITE_URL_TEMPLATE, builder.getFile());
@@ -66,7 +68,7 @@ public class Database {
 	 */
 	public void renameTable(String oldName, String newName) {
 		try {
-			PreparedStatement ps = connection.prepareStatement("RENAME " + oldName + " " + newName);
+			PreparedStatement ps = connection.prepareStatement("RENAME " + database + "." + oldName + " TO " + database + "." + newName);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			log("Failed to rename table", e);

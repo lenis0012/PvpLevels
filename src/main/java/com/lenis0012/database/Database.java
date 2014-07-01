@@ -16,13 +16,12 @@ public class Database {
 	private final DatabaseFactory databaseFactory;
 	private final String connectionUrl;
 	private final String driver;
-	private final String database;
+	private boolean converted;
 	private Connection connection;
 	
 	protected Database(DatabaseFactory databaseFactory, DatabaseConfigBuilder builder) {
 		this.databaseFactory = databaseFactory;
 		this.driver = builder.getDriver();
-		this.database = builder.getDatabase();
 		if(builder.getFile() != null) {
 			//Use SQLITE
 			this.connectionUrl = String.format(SQLITE_URL_TEMPLATE, builder.getFile());
@@ -240,7 +239,10 @@ public class Database {
 		}
 		
 		this.connection = DriverManager.getConnection(connectionUrl);
-		databaseFactory.doConversion(this);
+		if(!converted) {
+			this.converted = true;
+			databaseFactory.doConversion(this);
+		}
 	}
 	
 	/**

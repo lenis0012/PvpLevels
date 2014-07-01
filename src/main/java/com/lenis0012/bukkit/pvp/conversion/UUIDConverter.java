@@ -57,6 +57,8 @@ public class UUIDConverter extends Converter {
 			entries.add(info);
 		}
 		
+		database.close(); //Safe disconnect
+		
 		//Fetch UUIDS
 		PvpLevels.instance.getLogger().log(Level.INFO, "Obtaining UUID from " + entries.size() + " entries.");
 		UUIDFetcher fetcher = new UUIDFetcher(usernames);
@@ -67,6 +69,8 @@ public class UUIDConverter extends Converter {
 		} catch(Exception e) {
 			throw new SQLException("Failed to convert uuids!");
 		}
+		
+		database.connect(); //Safe reconnect
 		
 		//Reset table
 		database.deleteTable(getOldTable().getName());

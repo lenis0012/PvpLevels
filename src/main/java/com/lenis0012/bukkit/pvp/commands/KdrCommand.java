@@ -12,6 +12,7 @@ import com.lenis0012.bukkit.pvp.PvpPlayer;
 
 public class KdrCommand implements CommandExecutor {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!(sender instanceof Player)) {

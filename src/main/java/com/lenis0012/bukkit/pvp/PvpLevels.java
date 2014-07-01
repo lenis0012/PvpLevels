@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.lenis0012.bukkit.pvp.commands.KdrCommand;
 import com.lenis0012.bukkit.pvp.commands.LevelCommand;
 import com.lenis0012.bukkit.pvp.conversion.UUIDConverter;
+import com.lenis0012.bukkit.pvp.conversion.UUIDFetcher;
 import com.lenis0012.bukkit.pvp.hooks.Hook;
 import com.lenis0012.bukkit.pvp.hooks.VaultHook;
 import com.lenis0012.bukkit.pvp.listeners.EntityListener;
@@ -143,12 +144,18 @@ public class PvpLevels extends JavaPlugin {
 	 * @param name Player name
 	 * @return Unsafe pvp player
 	 */
+	@Deprecated
 	public PvpPlayer getPlayer(String name) {
-		return new PvpPlayer(name);
+		try {
+			return new PvpPlayer(UUIDFetcher.getUUIDOf(name).toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new PvpPlayer(name);
+		}
 	}
 	
 	public void loadPlayer(Player player) {
-		PvpPlayer pp = new PvpPlayer(player.getName());
+		PvpPlayer pp = new PvpPlayer(player.getUniqueId().toString());
 		players.put(player.getName(), pp);
 	}
 	

@@ -39,6 +39,7 @@ public class EntityListener implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler (priority = EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event) {
 		Entity entity = event.getEntity();

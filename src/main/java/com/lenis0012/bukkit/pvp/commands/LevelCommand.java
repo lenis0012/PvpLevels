@@ -17,6 +17,7 @@ public class LevelCommand implements CommandExecutor {
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("pvplevels.change")) {
 			sender.sendMessage("\2474You don't have permission for this command!");

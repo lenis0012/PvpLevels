@@ -54,7 +54,7 @@ public class Database {
 			PreparedStatement ps = connection.prepareStatement("DROP TABLE " + table);
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			log("Failed to rename table", e);
+			log("Failed to delete table", e);
 		}
 	}
 	
@@ -66,7 +66,7 @@ public class Database {
 	 */
 	public void renameTable(String oldName, String newName) {
 		try {
-			PreparedStatement ps = connection.prepareStatement("RENAME " + oldName + " TO " + newName);
+			PreparedStatement ps = connection.prepareStatement("RENAME " + oldName + " " + newName);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			log("Failed to rename table", e);

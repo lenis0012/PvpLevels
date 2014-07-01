@@ -16,18 +16,19 @@ public abstract class Converter {
 				Table newTable = getNewTable();
 				
 				//Rename/backup
-				database.renameTable(oldTable.getName(), oldTable.getName() + "_backup");
+//				database.renameTable(oldTable.getName(), oldTable.getName() + "_backup");
 				
-				//Load antried
-				PreparedStatement ps = database.getConnection().prepareStatement("SELECT * FROM " + oldTable.getName() + "_backup;");
+				//Load entries
+				PreparedStatement ps = database.getConnection().prepareStatement("SELECT * FROM " + oldTable.getName()/* + "_backup;"*/);
 				ResultSet entries = ps.executeQuery();
 				
 				//Convert
+				database.deleteTable(oldTable.getName());
 				database.registerTable(newTable);
 				convertAll(database, entries);
 				
 				//Remove backup
-				database.deleteTable(oldTable.getName() + "_backup");
+//				database.deleteTable(oldTable.getName() + "_backup");
 				onComplete(); //DONE
 			}
 		} catch(SQLException e) {

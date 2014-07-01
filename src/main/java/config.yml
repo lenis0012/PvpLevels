@@ -17,9 +17,11 @@ settings:
   kill-session: 3
   
   # Shall we display the lvl next to the player's nametag? --> Notch<br>3 Levels
+  # This feature is no longer available =(
   display-lvl-below-name: true
   
   # What text we should use for the below-name text (format = '<level> ' + text)
+  # This feature is no longer available =(
   lvl-below-name-txt: '&aLevels'
   
   # Message controling, disable/enable messages
@@ -31,12 +33,18 @@ settings:
 
 # MySQL settings
 MySQL:
-  use: false
-  host: 'localhost'
+  # Wether or not we should use MySQL
+  enabled: false
+  # MySQL host, 127.0.0.1 is local.
+  host: '127.0.0.1'
+  # MySQL port, 3306 is default.
   port: 3306
-  database: 'bukkit'
+  # Name of database, pvplevels is recommented.
+  database: 'pvplevels'
+  # Username of database, root on most servers.
   username: 'root'
-  password: ''
+  # Password of database, this shouldn't by empty.
+  password: 'INSERT PASSWORD HERE'
 
 # Internal data, don't change this
-version: 1
+version: 2

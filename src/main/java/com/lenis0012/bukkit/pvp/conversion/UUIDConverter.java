@@ -57,6 +57,7 @@ public class UUIDConverter extends Converter {
 			entries.add(info);
 		}
 		
+		//Fetch UUIDS
 		PvpLevels.instance.getLogger().log(Level.INFO, "Obtaining UUID from " + entries.size() + " entries.");
 		UUIDFetcher fetcher = new UUIDFetcher(usernames);
 		Map<String, UUID> uuids;
@@ -67,6 +68,11 @@ public class UUIDConverter extends Converter {
 			throw new SQLException("Failed to convert uuids!");
 		}
 		
+		//Reset table
+		database.deleteTable(getOldTable().getName());
+		database.registerTable(getNewTable());
+		
+		//Insert new data
 		for(Object[] info : entries) {
 			String username = (String) info[0];
 			int level = (Integer) info[1];

@@ -68,7 +68,7 @@ public class Database {
 	 */
 	public void renameTable(String oldName, String newName) {
 		try {
-			PreparedStatement ps = connection.prepareStatement("RENAME " + database + "." + oldName + " TO " + database + "." + newName);
+			PreparedStatement ps = connection.prepareStatement("RENAME " + oldName + " TO " + newName);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			log("Failed to rename table", e);

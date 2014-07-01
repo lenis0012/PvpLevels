@@ -13,23 +13,13 @@ public abstract class Converter {
 		try {
 			if(needsConversion(database)) {
 				Table oldTable = getOldTable();
-				Table newTable = getNewTable();
-				
-				//Rename/backup
-				database.renameTable(oldTable.getName(), oldTable.getName() + "_backup");
 				
 				//Load entries
-				PreparedStatement ps = database.getConnection().prepareStatement("SELECT * FROM " + oldTable.getName()/* + "_backup;"*/);
+				PreparedStatement ps = database.getConnection().prepareStatement("SELECT * FROM " + oldTable.getName());
 				ResultSet entries = ps.executeQuery();
 				
 				//Convert
-//				database.deleteTable(oldTable.getName());
-				database.registerTable(newTable);
 				convertAll(database, entries);
-				
-				//Remove backup
-				database.deleteTable(oldTable.getName() + "_backup");
-				onComplete(); //DONE
 			}
 		} catch(SQLException e) {
 			Bukkit.getLogger().log(Level.WARNING, "Failed to convert database", e);

@@ -42,7 +42,7 @@ MySQL:
   # Name of database, pvplevels is recommented.
   database: 'pvplevels'
   # Username of database, root on most servers.
-  username: 'root'
+  user: 'root'
   # Password of database, this shouldn't by empty.
   password: 'INSERT PASSWORD HERE'
 
